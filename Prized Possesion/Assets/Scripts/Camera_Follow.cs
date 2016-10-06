@@ -22,7 +22,7 @@ public class Camera_Follow : MonoBehaviour
         if (target)
         {
             Vector3 point = myCamera.WorldToViewportPoint(target.position);
-            Vector3 delta = target.position - myCamera.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, point.z));
+            Vector3 delta = target.position - myCamera.ViewportToWorldPoint(new Vector3(0.7f, 0.5f, point.z));
             Vector3 destination = new Vector3(transform.position.x, transform.position.y + yPos, transform.position.z) + delta;
             transform.position = Vector3.SmoothDamp(transform.position, destination, ref velocity, dampTime);
         }
