@@ -31,13 +31,13 @@ public class Camera_Follow : MonoBehaviour
     //Camera will follow who is first
     void FindTarget()
     {
-        if(players[0].transform.InverseTransformPoint(players[1].transform.position).x < 0)
-        {
-            target = players[0].transform;
-        }
-        else
-        {
-            target = players[1].transform;
-        }
+        //if(players[0].transform.InverseTransformPoint(players[1].transform.position).x < 0)
+        //{
+        //    target = players[0].transform;
+        //}
+        //else
+        //{
+        //    target = players[1].transform;
+        //}
     }
 }

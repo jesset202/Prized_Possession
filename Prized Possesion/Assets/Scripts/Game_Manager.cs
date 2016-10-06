@@ -10,12 +10,12 @@ public class Game_Manager : MonoBehaviour
     void Start()
     {
         players = GameObject.FindGameObjectsWithTag("Player");
-        SetControls();
+        //SetControls();
     }
     
     void Update()
     {
-        CheckChaserWin();
+        //CheckChaserWin();
     }
 
     void SetControls()

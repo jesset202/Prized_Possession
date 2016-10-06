@@ -11,8 +11,9 @@ public class Player : MonoBehaviour
     }
 
     //Variables
-    public float movSpeed   = 0;  //Movement speed
-    public float jumpPower  = 0; //Jump Power
+    public float movSpeed   = 0;    //Movement speed
+    public float jumpPower  = 0;    //Jump Power
+    public float myPoints   = 0;    //Collecting coins
     public Role myRole;
 
     //Components
@@ -40,6 +41,8 @@ public class Player : MonoBehaviour
 
         //Init variables
         myRole = Role.Runner;
+        jump = KeyCode.W;
+        slide = KeyCode.S;
     }
 	
     //Update
@@ -65,6 +68,24 @@ public class Player : MonoBehaviour
         if(Input.GetKeyDown(slide))
         {
             myAnimator.SetTrigger("Slide");
+        }
+    }
+
+    //Check for obstacles/powerups/coins
+    void OnTriggerEnter(Collider col)
+    {
+        //Check if hit coin
+        if(col.gameObject.tag == "Coin")
+        {
+            Destroy(col.gameObject);
+            myPoints++;
+        }
+
+        //Check if hit speed powerUp
+        if (col.gameObject.tag == "PowerUp_Speed")
+        {
+            Destroy(col.gameObject);
+            myPoints++;
         }
     }
 }
