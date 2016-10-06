@@ -69,6 +69,7 @@ public class Player : MonoBehaviour
         {
             myAnimator.SetTrigger("Slide");
         }
+        //change
     }
 
     //Check for obstacles/powerups/coins
