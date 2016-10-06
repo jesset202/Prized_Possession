@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
     //Components
     private Rigidbody   myRigidbody;
     private Animator    myAnimator;
+    private TrailRenderer myTrail;
 
     //Models
     public GameObject modelDagger;
@@ -34,6 +35,7 @@ public class Player : MonoBehaviour
         //init components
         myRigidbody = GetComponent<Rigidbody>();
         myAnimator = GetComponentInChildren<Animator>();
+        myTrail = GetComponent<TrailRenderer>();
 
         //Disable models
         modelDagger.GetComponent<MeshRenderer>().enabled = false;
@@ -86,7 +88,39 @@ public class Player : MonoBehaviour
         if (col.gameObject.tag == "PowerUp_Speed")
         {
             Destroy(col.gameObject);
-            myPoints++;
+            StartCoroutine("PowerUp_Speed");
         }
+    }
+
+
+    //POWER UPS
+
+    //Speed
+    IEnumerator PowerUp_Speed()
+    {
+        float prevSpeed = movSpeed;
+        movSpeed += 5f;
+        yield return new WaitForSeconds(5f);
+        movSpeed = prevSpeed;
+    }
+    
+    //OBSTACLES
+
+    //Slow
+    IEnumerator Obstacle_Slow()
+    {
+        float prevSpeed = movSpeed;
+        movSpeed -= 5f;
+        yield return new WaitForSeconds(5f);
+        movSpeed = prevSpeed;
+    }
+
+    //Stun
+    IEnumerator Obstacle_Stun()
+    {
+        float prevSpeed = movSpeed;
+        movSpeed = 0f;
+        yield return new WaitForSeconds(5f);
+        movSpeed = prevSpeed;
     }
 }
