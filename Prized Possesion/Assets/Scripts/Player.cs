@@ -58,7 +58,7 @@ public class Player : MonoBehaviour
         if(Input.GetKeyDown(jump))
         {
             //myAnimator.SetTrigger("Jump");
-            myRigidbody.velocity = new Vector3(myRigidbody.velocity.x, jumpPower);
+            myRigidbody.velocity += Vector3.up * jumpPower;
         }
 
         //Slide
