@@ -11,9 +11,10 @@ public class Player : MonoBehaviour
     }
 
     //Variables
-    public float movSpeed   = 0;    //Movement speed
-    public float jumpPower  = 0;    //Jump Power
-    public float myPoints   = 0;    //Collecting coins
+    public float movSpeed   = 0;        //Movement speed
+    public float jumpPower  = 0;        //Jump Power
+    public float myPoints   = 0;        //Collecting coins
+    public bool isGrounded;
     public Role myRole;
 
     //Components
@@ -46,9 +47,30 @@ public class Player : MonoBehaviour
         jump = KeyCode.W;
         slide = KeyCode.S;
     }
-	
+
+    //Ground stuff
+    void FixedUpdate()
+    {
+        // Get the velocity
+        Vector3 horizontalMove = myRigidbody.velocity;
+        // Don't use the vertical velocity
+        horizontalMove.y = 0;
+        // Calculate the approximate distance that will be traversed
+        float distance = horizontalMove.magnitude * Time.fixedDeltaTime;
+        // Normalize horizontalMove since it should be used to indicate direction
+        horizontalMove.Normalize();
+        RaycastHit hit;
+
+        // Check if the body's current velocity will result in a collision
+        if (myRigidbody.SweepTest(horizontalMove, out hit, distance) && hit.transform.gameObject.tag == "Obstacle")
+        {
+            // If so, stop the movement
+            myRigidbody.velocity = new Vector3(0, myRigidbody.velocity.y, 0);
+        }
+    }
+
     //Update
-	void Update ()
+    void Update ()
     {
         Controls();
     }
@@ -90,8 +112,21 @@ public class Player : MonoBehaviour
             Destroy(col.gameObject);
             StartCoroutine("PowerUp_Speed");
         }
+
+        //Check if grounded
+        if (col.gameObject.tag == "Ground")
+        {
+            isGrounded = true;
+        }
     }
 
+    void OnTriggerExit(Collider col)
+    {
+        if(col.tag == "Ground")
+        {
+            isGrounded = false;
+        }
+    }
 
     //POWER UPS
 
