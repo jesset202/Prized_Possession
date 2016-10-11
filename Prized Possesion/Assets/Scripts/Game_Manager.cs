@@ -6,16 +6,57 @@ public class Game_Manager : MonoBehaviour
 {
     public GameObject prefabPlayer;
     public GameObject[] players;
+    private GameObject altar;
+    private bool phase2 = false;
+
+    void Awake()
+    {
+        DontDestroyOnLoad(this);
+    }
 
     void Start()
     {
         players = GameObject.FindGameObjectsWithTag("Player");
-        //SetControls();
+        altar = GameObject.FindGameObjectWithTag("Altar");
+
+        if (players.Length == 2)
+        {
+            SetControls();
+        }
     }
     
     void Update()
     {
-        //CheckChaserWin();
+        if(players.Length == 2)
+        {
+            CheckChaserWin();
+            CheckPhase2();
+        }
+    }
+
+    void CheckPhase2()
+    {
+        //Check if some has gotten to the altar
+        if (altar == null)
+        {
+            phase2 = true;
+        }
+
+        //Move the runner 5 units infront of the chaser
+        if (phase2)
+        {
+            if (players[0].GetComponent<Player>().myRole == Player.Role.Chaser)//check if p1 is chaser
+            {
+                players[1].transform.position = new Vector3(players[0].transform.position.x + 5f, 0.0f, 0.0f);//move player 2 infront of chaser
+            }
+
+            if (players[1].GetComponent<Player>().myRole == Player.Role.Chaser)
+            {
+                players[0].transform.position = new Vector3(players[1].transform.position.x + 5f, 0.0f, 0.0f);
+            }
+            phase2 = false;
+        }
+        
     }
 
     void SetControls()

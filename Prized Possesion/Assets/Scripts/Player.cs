@@ -11,15 +11,15 @@ public class Player : MonoBehaviour
     }
 
     //Variables
-    public float movSpeed   = 0;        //Movement speed
-    public float jumpPower  = 0;        //Jump Power
-    public float myPoints   = 0;        //Collecting coins
+    public float movSpeed = 0;       
+    public float jumpPower = 0;      
+    public float myPoints = 0;       
     public bool isGrounded;
     public Role myRole;
 
     //Components
-    private Rigidbody   myRigidbody;
-    private Animator    myAnimator;
+    public Rigidbody myRigidbody;
+    private Animator myAnimator;
     private TrailRenderer myTrail;
 
     //Models
@@ -30,8 +30,13 @@ public class Player : MonoBehaviour
     public KeyCode jump;
     public KeyCode slide;
 
+    void Awake()
+    {
+        DontDestroyOnLoad(this);
+    }
+
     //Start
-	void Start ()
+    void Start()
     {
         //init components
         myRigidbody = GetComponent<Rigidbody>();
@@ -70,7 +75,7 @@ public class Player : MonoBehaviour
     }
 
     //Update
-    void Update ()
+    void Update()
     {
         Controls();
     }
@@ -81,26 +86,27 @@ public class Player : MonoBehaviour
         //Auto-Run
         myRigidbody.velocity = new Vector3(1 * movSpeed, myRigidbody.velocity.y);
 
-        //Jump
-        if(Input.GetKeyDown(jump))
+        if (isGrounded)
         {
-            //myAnimator.SetTrigger("Jump");
-            myRigidbody.velocity += Vector3.up * jumpPower;
+            //Jump
+            if (Input.GetKeyDown(jump))
+            {
+                myAnimator.SetTrigger("Jump");
+                myRigidbody.velocity += Vector3.up * jumpPower;
+            }
+            //Slide
+            if (Input.GetKeyDown(slide))
+            {
+                myAnimator.SetTrigger("Slide");
+            }
         }
-
-        //Slide
-        if(Input.GetKeyDown(slide))
-        {
-            myAnimator.SetTrigger("Slide");
-        }
-        //change
     }
 
     //Check for obstacles/powerups/coins
     void OnTriggerEnter(Collider col)
     {
         //Check if hit coin
-        if(col.gameObject.tag == "Coin")
+        if (col.gameObject.tag == "Coin")
         {
             Destroy(col.gameObject);
             myPoints++;
@@ -112,17 +118,19 @@ public class Player : MonoBehaviour
             Destroy(col.gameObject);
             StartCoroutine("PowerUp_Speed");
         }
+    }
 
+    void OnCollisionEnter(Collision col)
+    {
         //Check if grounded
         if (col.gameObject.tag == "Ground")
         {
             isGrounded = true;
         }
     }
-
-    void OnTriggerExit(Collider col)
+    void OnCollisionExit(Collision col)
     {
-        if(col.gameObject.tag == "Ground")
+        if (col.gameObject.tag == "Ground")
         {
             isGrounded = false;
         }
@@ -138,7 +146,7 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(5f);
         movSpeed = prevSpeed;
     }
-    
+
     //OBSTACLES
 
     //Slow
