@@ -122,7 +122,7 @@ public class Player : MonoBehaviour
 
     void OnTriggerExit(Collider col)
     {
-        if(col.tag == "Ground")
+        if(col.gameObject.tag == "Ground")
         {
             isGrounded = false;
         }
