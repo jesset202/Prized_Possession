@@ -7,7 +7,8 @@ public class Game_Manager : MonoBehaviour
     public GameObject prefabPlayer;
     public GameObject[] players;
     private GameObject altar;
-    private bool phase2 = false;
+    public bool phase2 = false;
+    public bool checkChaserWin = false;
 
     void Awake()
     {
@@ -24,10 +25,10 @@ public class Game_Manager : MonoBehaviour
             SetControls();
         }
     }
-    
+
     void Update()
     {
-        if(players.Length == 2)
+        if (players.Length == 2)
         {
             CheckChaserWin();
             CheckPhase2();
@@ -36,12 +37,6 @@ public class Game_Manager : MonoBehaviour
 
     void CheckPhase2()
     {
-        //Check if some has gotten to the altar
-        if (altar == null)
-        {
-            phase2 = true;
-        }
-
         //Move the runner 5 units infront of the chaser
         if (phase2)
         {
@@ -55,8 +50,9 @@ public class Game_Manager : MonoBehaviour
                 players[0].transform.position = new Vector3(players[1].transform.position.x + 5f, 0.0f, 0.0f);
             }
             phase2 = false;
+            checkChaserWin = true;
         }
-        
+
     }
 
     void SetControls()
@@ -70,19 +66,22 @@ public class Game_Manager : MonoBehaviour
 
     void CheckChaserWin()
     {
-        if (players[0].GetComponent<Player>().myRole == Player.Role.Chaser)
+        if (checkChaserWin)
         {
-            if (players[0].transform.InverseTransformPoint(players[1].transform.position).x <= 0)
+            if (players[0].GetComponent<Player>().myRole == Player.Role.Chaser)
             {
-                Debug.Log("Chaser1 win");
+                if (players[0].transform.InverseTransformPoint(players[1].transform.position).x >= 0)
+                {
+                    Destroy(players[1]);
+                }
             }
-        }
-        
-        if(players[1].GetComponent<Player>().myRole == Player.Role.Chaser)
-        {
-            if (players[1].transform.InverseTransformPoint(players[0].transform.position).x <= 0)
+
+            if (players[1].GetComponent<Player>().myRole == Player.Role.Chaser)
             {
-                Debug.Log("Chaser2 win");
+                if (players[1].transform.InverseTransformPoint(players[0].transform.position).x >= 0)
+                {
+                    Destroy(players[0]);
+                }
             }
         }
     }

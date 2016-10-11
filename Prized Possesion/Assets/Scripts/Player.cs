@@ -98,6 +98,12 @@ public class Player : MonoBehaviour
             if (Input.GetKeyDown(slide))
             {
                 myAnimator.SetTrigger("Slide");
+                myAnimator.SetBool("isSliding", true);
+            }
+            //Slide
+            if (Input.GetKeyUp(slide))
+            {
+                myAnimator.SetBool("isSliding", false);
             }
         }
     }
